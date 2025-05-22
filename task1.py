@@ -2,8 +2,8 @@
 class Product:
     def __init__(self, name, price, quantity):
         self.name = str(name)
-        self.price = float(price)
-        self.quantity = int(quantity)
+        self.price = price
+        self.quantity = quantity
 
     # Print out function
     def display_info(self):
@@ -47,8 +47,8 @@ def remove_product(inventory, name):
 
 # display_inventory(inventory) → Prints all products.
 def display_inventory(inventory):
-    for key, value in inventory.items():
-        print(f'Key: {key}, Value: {value}')
+    for item in inventory:
+        print(f'Name: {inventory[item].name}, Price: {inventory[item].price}, Quantity: {inventory[item].quantity}')
 
 # search_product(inventory, name) → Shows product details if found.
 def search_product(inventory, name):
@@ -67,21 +67,21 @@ while not quit:
 
     # Handle different inputs
     if entry == 1:
-        name = str(input("Name: "))
+        name = input("Name: ")
         price = float(input("Price: "))
         quantity = int(input("Quantity: "))
         add_product(inventory, name, price, quantity)
     elif entry == 2:
-        name = str(input("Name: "))
+        name = input("Name: ")
         change = int(input("Add quantity: "))
         update_quantity(inventory, name, change)
     elif entry == 3:
-        name = str(input("Name: "))
+        name = input("Name: ")
         remove_product(inventory, name)
     elif entry == 4:
         display_inventory(inventory)
     elif entry == 5:
-        name = str(input("Name: "))
+        name = input("Name: ")
         search_product(inventory, name)
     elif entry == 6:
         # Create tuple of last three actions, print, and exit
