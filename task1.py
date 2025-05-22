@@ -1,7 +1,7 @@
 
 class Product:
     def __init__(self, name, price, quantity):
-        self.name = str(name)
+        self.name = name
         self.price = price
         self.quantity = quantity
 
@@ -22,7 +22,7 @@ actions = []
 def add_product(inventory, name, price, quantity):
     inventory[name] = Product(name, price, quantity)
 
-    currCategory = str(input("Enter product category: "))
+    currCategory = input("Enter product category: ")
     if currCategory not in category:
         category.add(currCategory)
 
