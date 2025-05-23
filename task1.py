@@ -1,4 +1,3 @@
-
 class Product:
     def __init__(self, name, price, quantity):
         self.name = name
@@ -11,6 +10,18 @@ class Product:
         print("Price: " + self.price)
         print("Quantity: " + self.quantity)
 
+import logging
+import datetime
+
+def logger_helper():
+        logging.basicConfig(filename='task1.log',
+                            format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                            level=logging.INFO)
+
+        return logging.getLogger(__name__)
+
+logger = logger_helper()
+
 # Dictionary
 inventory = {}
 # Set
@@ -21,41 +32,51 @@ actions = []
 # Decorator for adding product
 def add_decorator(f):
     def wrap(inventory, name, price, quantity):
-        print("Actions before adding product: ", actions)
+        logger.info("Before adding product")
+        # print("Actions before adding product: ", actions)
         f(inventory, name, price, quantity)
-        print("Actions after adding product: ", actions)
+        logger.info("After adding product")
+        # print("Actions after adding product: ", actions)
     return wrap
 
 # Decorator for updating stock
 def update_decorator(f):
     def wrap(inventory, name, change):
-        print("Quantity before updating stock: ", inventory[name].quantity)
+        logger.info("Before updating product")
+        # print("Quantity before updating stock: ", inventory[name].quantity)
         f(inventory, name, change)
-        print("Quantity after updating stock: ", inventory[name].quantity)
+        logger.info("After updating product")
+        # print("Quantity after updating stock: ", inventory[name].quantity)
     return wrap
 
 # Decorator for displaying inventory
 def display_decorator(f):
     def wrap(inventory):
-        print("\nBefore displaying inventory")
+        logger.info("Before displaying inventory")
+        # print("\nBefore displaying inventory")
         f(inventory)
-        print("After displaying inventory")
+        logger.info("After displaying inventory")
+        # print("After displaying inventory")
     return wrap
 
 # Decorator for removing product
 def remove_decorator(f):
     def wrap(inventory, name):
-        print("\nBefore removing product: ", actions)
+        logger.info("Before removing")
+        # print("\nBefore removing product: ", actions)
         f(inventory, name)
-        print("After removing product: ", actions)
+        logger.info("After removing product")
+        # print("After removing product: ", actions)
     return wrap
 
 # Decorator for searching
 def search_decorator(f):
     def wrap(inventory, name):
-        print("\nBefore searching product")
+        logger.info("Before searching product")
+        # print("\nBefore searching product")
         f(inventory, name)
-        print("After searching product")
+        logger.info("After searching product")
+        # print("After searching product")
     return wrap
 
 # add_product(inventory, name, price, quantity) → Adds a new product.
@@ -76,7 +97,8 @@ def update_quantity(inventory, name, change):
         inventory[name].quantity += change
         actions.append("Updated Stock")
     except KeyError:
-        print("Name doesn't exist")
+        logger.error("Name doesn't exist")
+        # print("Name doesn't exist")
 
 
 # remove_product(inventory, name) → Deletes a product.
@@ -86,7 +108,8 @@ def remove_product(inventory, name):
         del inventory[name]
         actions.append("Removed " + name)
     except KeyError:
-        print("Name doesn't exist")
+        logger.error("Name doesn't exist")
+        # print("Name doesn't exist")
 
 # display_inventory(inventory) → Prints all products.
 @display_decorator
@@ -100,7 +123,8 @@ def search_product(inventory, name):
     try:
         print(f'Item found:\nName: {name}, Price: {inventory[name].price}, Quantity: {inventory[name].quantity}')
     except KeyError:
-        print("Name not found")
+        logger.error("Name doesn't exist")
+        # print("Name not found")
 
 
 quit = False
@@ -112,35 +136,44 @@ while not quit:
 
     # Handle different inputs
     if entry == 1:
-        name = input("Name: ")
+        name = input("Name: ").lower()
         price = float(input("Price: "))
         quantity = int(input("Quantity: "))
         add_product(inventory, name, price, quantity)
     elif entry == 2:
-        name = input("Name: ")
+        name = input("Name: ").lower()
         change = int(input("Add quantity: "))
         try:
             update_quantity(inventory, name, change)
         except KeyError:
-            print("Name doesn't exist")
+            logger.error("Name doesn't exist")
+            # print("Name doesn't exist")
     elif entry == 3:
-        name = input("Name: ")
+        name = input("Name: ").lower()
         remove_product(inventory, name)
     elif entry == 4:
         display_inventory(inventory)
     elif entry == 5:
-        name = input("Name: ")
+        name = input("Name: ").lower()
         search_product(inventory, name)
     elif entry == 6:
         # Create tuple of last three actions, print, and exit
-        lastThree = (actions.pop(), actions.pop(), actions.pop())
-        print("Last three actions: ", lastThree)
+        if len(actions) >= 3:
+            lastThree = (actions.pop(), actions.pop(), actions.pop())
+            logger.info(f"Last three actions: {lastThree}")
+            # print("Last three actions: ", lastThree)
+        else:
+            logger.info(f"Last actions were: {actions}")
+            # print("Last actions were: ", actions)
         quit = True
         break
     else:
-        print("Invalid input. Try again.")
+        logger.error("Invalid choice")
+        # print("Invalid input. Try again.")
         continue
 
     # Debug
-    print ("\nDebugging\n\tCategories: ", category)
-    print ("\tActions done: ", actions, "\n")
+    logger.debug("\nDebugging\n\tCategories: ", category)
+    logger.debug("\tActions done: ", actions)
+    # print ("\nDebugging\n\tCategories: ", category)
+    # print ("\tActions done: ", actions, "\n")
