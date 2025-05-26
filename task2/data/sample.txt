@@ -1,0 +1,3 @@
+Hello there!
+Welcome to the Python file handling task.
+This file contains three lines.
