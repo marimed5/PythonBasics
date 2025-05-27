@@ -4,7 +4,7 @@ import random
 import re
 
 #Reading and printing
-filename = '/Users/mariyemahmed/PycharmProjects/PythonProject/task2/data/sample.txt'
+filename = 'data/sample.txt'
 
 try:
     with open(filename, 'r') as f:
@@ -39,19 +39,23 @@ except FileNotFoundError:
 
 
 #Renaming files
-os.chdir('/Users/mariyemahmed/PycharmProjects/PythonProject/task2/data/reports/')
+os.chdir('data/reports/')
 
 for f in os.listdir():
-    f_name, f_ext = os.path.splitext(f)
-    f_header, f_num = f_name.split('-')
+    try:
+        f_name, f_ext = os.path.splitext(f)
+        f_header, f_num = f_name.split('-')
 
-    newfile = '{}_{}{}'.format(f_header.capitalize(), f_num.zfill(2), f_ext)
-    os.rename(f, newfile)
+        newfile = '{}_{}{}'.format(f_header.capitalize(), f_num.zfill(2), f_ext)
+        os.rename(f, newfile)
+    except ValueError:
+        pass
 
+os.chdir('../..')
 
 #Parsing CSV files
 
-file = '/Users/mariyemahmed/PycharmProjects/PythonProject/task2/data/people.csv'
+file = 'data/people.csv'
 
 # Random greetings
 greetings = ["Hi", "Hello", "Howdy", "Hey", "Bonjour"]
